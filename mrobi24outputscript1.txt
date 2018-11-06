@@ -1,0 +1,72 @@
+Warning: Using a password on the command line interface can be insecure.
+--------------
+SHOW DATABASES
+--------------
+
+Database
+information_schema
+mrobi24assign2db
+mysql
+performance_schema
+--------------
+DROP DATABASE IF EXISTS mrobi24assign2db
+--------------
+
+--------------
+CREATE DATABASE mrobi24assign2db
+--------------
+
+--------------
+GRANT USAGE ON *.* TO 'ta'@'localhost'
+--------------
+
+--------------
+DROP USER 'ta'@'localhost'
+--------------
+
+--------------
+CREATE USER 'ta'@'localhost' IDENTIFIED BY 'cs3319'
+--------------
+
+--------------
+GRANT ALL PRIVILEGES ON mrobi24assign2db.* TO 'ta'@'localhost'
+--------------
+
+--------------
+FLUSH PRIVILEGES
+--------------
+
+--------------
+SHOW TABLES
+--------------
+
+--------------
+CREATE TABLE product (productid CHAR(2) NOT NULL, description VARCHAR(20), price VARCHAR(20), stock INT NOT NULL, PRIMARY KEY (productid))
+--------------
+
+--------------
+CREATE TABLE employee (employeeid CHAR(2) NOT NULL, fname VARCHAR(30), lname VARCHAR(30), city VARCHAR(15), commission INT NOT NULL, PRIMARY KEY (employeeid))
+--------------
+
+--------------
+CREATE TABLE customer (customerid CHAR(2) NOT NULL, fname VARCHAR(30), lname VARCHAR(30), city VARCHAR(15), phone VARCHAR(9), PRIMARY KEY (customerid))
+--------------
+
+--------------
+CREATE TABLE purchase (quantity INT, customerid CHAR(2) NOT NULL, productid CHAR(2) NOT NULL, FOREIGN KEY (customerid) REFERENCES customer(customerid), FOREIGN KEY (productid) REFERENCES product(productid))
+--------------
+
+--------------
+CREATE TABLE dealsWith (employeeid CHAR(2) NOT NULL, customerid CHAR(2) NOT NULL, FOREIGN KEY (employeeid) REFERENCES employee(employeeid), FOREIGN KEY (customerid) REFERENCES customer(customerid))
+--------------
+
+--------------
+SHOW TABLES
+--------------
+
+Tables_in_mrobi24assign2db
+customer
+dealsWith
+employee
+product
+purchase

@@ -1,0 +1,130 @@
+Warning: Using a password on the command line interface can be insecure.
+--------------
+SELECT description FROM product
+--------------
+
+description
+Bike
+Socks
+Flex Tape
+Elbow Pads
+Knee Pads
+Roller Blades
+Helmet
+--------------
+SELECT DISTINCT city FROM customer
+--------------
+
+city
+Boston
+Springfield
+Kypto
+Providence
+--------------
+SELECT * FROM employee ORDER BY city
+--------------
+
+employeeid	fname	lname	city	commission
+33	David	Letterman	Bedrock	100
+11	Regis	Philbin	Boston	33
+17	Matthew	Robinson	Forest	100
+22	Courtney	Cox	New York	25
+12	Rosie	Cox	Ottawa	50
+66	Rosie	ODonnell	Ottawa	100
+99	Hugh	Grant	Springfield	16
+--------------
+SELECT fname, lname FROM customer WHERE city="Springfield"
+--------------
+
+fname	lname
+Monty	Burns
+Homer	Simpson
+Sideshow	Bob
+--------------
+SELECT lname FROM customer WHERE customer.customerid IN (SELECT customerid FROM dealsWith WHERE dealsWith.customerid IN (SELECT employeeid FROM employee WHERE employee.fname="Regis"))
+--------------
+
+--------------
+SELECT description FROM product WHERE description LIKE '%pad%' OR '%Pad%'
+--------------
+
+description
+Elbow Pads
+Knee Pads
+--------------
+SELECT lname, description, quantity FROM customer, product, purchase WHERE purchase.customerid = customer.customerid AND purchase.productid = product.productid
+--------------
+
+lname	description	quantity
+Griffens	Elbow Pads	19
+Flinstone	Elbow Pads	2
+Flinstone	Knee Pads	2
+Simpson	Helmet	20
+Simpson	Socks	14
+Simpson	Elbow Pads	10
+Bob	Helmet	5
+Bob	Socks	5
+Bob	Knee Pads	5
+Bob	Elbow Pads	5
+--------------
+SELECT SUM(quantity) AS "Homer's Total Purchases" FROM purchase WHERE customerid=(SELECT customerid FROM customer WHERE fname="Homer")
+--------------
+
+Homer's Total Purchases
+44
+--------------
+SELECT SUM(purchase.quantity) AS quantity, customer.fname, customer.lname FROM purchase, customer  WHERE purchase.customerid=customer.customerid GROUP BY purchase.customerid
+--------------
+
+quantity	fname	lname
+19	Peter	Griffens
+4	Fred	Flinstone
+44	Homer	Simpson
+20	Sideshow	Bob
+--------------
+SELECT description, stock FROM product WHERE productid NOT IN (SELECT productid FROM purchase)
+--------------
+
+description	stock
+Bike	200
+Flex Tape	25
+Roller Blades	89
+--------------
+SELECT description, stock FROM product WHERE productid NOT IN (SELECT productid FROM purchase WHERE customerid IN (SELECT customerid FROM customer WHERE fname="Fred" AND lname="Flinstone"))
+--------------
+
+description	stock
+Bike	200
+Socks	100
+Flex Tape	25
+Roller Blades	89
+Helmet	30
+--------------
+SELECT employee.fname AS "Employee fname", employee.lname AS "Employee lname", customer.fname AS "Customer fname", customer.lname AS "Customer lname" FROM employee,customer WHERE employee.city=customer.city
+--------------
+
+Employee fname	Employee lname	Customer fname	Customer lname
+Regis	Philbin	Barney	Rubble
+Hugh	Grant	Monty	Burns
+Regis	Philbin	Fred	Flinstone
+Hugh	Grant	Homer	Simpson
+Hugh	Grant	Sideshow	Bob
+--------------
+SELECT SUM(quantity) AS "Purchased Knee Pads" FROM purchase WHERE productid=(SELECT productid FROM product WHERE description="Knee Pads")
+--------------
+
+Purchased Knee Pads
+7
+--------------
+SELECT description FROM product WHERE productid IN (SELECT productid FROM purchase GROUP BY productid HAVING COUNT(*) > 3)
+--------------
+
+description
+Elbow Pads
+--------------
+SELECT fname, lname FROM employee WHERE employee.employeeid IN (SELECT dealsWith.employeeid FROM dealsWith WHERE dealsWith.customerid IN (SELECT purchase.customerid FROM purchase WHERE productid IN (SELECT product.productid FROM product WHERE description="Knee Pads")))
+--------------
+
+fname	lname
+Regis	Philbin
+Rosie	ODonnell

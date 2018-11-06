@@ -1,0 +1,31 @@
+USE mrobi24assign2db;
+-- Query 1
+SELECT description FROM product;
+-- Query 2
+SELECT DISTINCT city FROM customer;
+-- Query 3
+SELECT * FROM employee ORDER BY city;
+-- Query 4
+SELECT fname, lname FROM customer WHERE city="Springfield";
+-- Query 5
+SELECT lname FROM customer WHERE customer.customerid IN (SELECT customerid FROM dealsWith WHERE dealsWith.customerid IN (SELECT employeeid FROM employee WHERE employee.fname="Regis"));
+-- Query 6
+SELECT description FROM product WHERE description LIKE '%pad%' OR '%Pad%';
+-- Query 7
+SELECT lname, description, quantity FROM customer, product, purchase WHERE purchase.customerid = customer.customerid AND purchase.productid = product.productid;
+-- Query 8
+SELECT SUM(quantity) AS "Homer's Total Purchases" FROM purchase WHERE customerid=(SELECT customerid FROM customer WHERE fname="Homer");
+-- Query 9
+SELECT SUM(purchase.quantity) AS quantity, customer.fname, customer.lname FROM purchase, customer  WHERE purchase.customerid=customer.customerid GROUP BY purchase.customerid;
+-- Query 10
+SELECT description, stock FROM product WHERE productid NOT IN (SELECT productid FROM purchase);
+-- Query 11
+SELECT description, stock FROM product WHERE productid NOT IN (SELECT productid FROM purchase WHERE customerid IN (SELECT customerid FROM customer WHERE fname="Fred" AND lname="Flinstone"));
+-- Query 12
+SELECT employee.fname AS "Employee fname", employee.lname AS "Employee lname", customer.fname AS "Customer fname", customer.lname AS "Customer lname" FROM employee,customer WHERE employee.city=customer.city;
+-- Query 13
+SELECT SUM(quantity) AS "Purchased Knee Pads" FROM purchase WHERE productid=(SELECT productid FROM product WHERE description="Knee Pads");
+-- Query 14
+SELECT description FROM product WHERE productid IN (SELECT productid FROM purchase GROUP BY productid HAVING COUNT(*) > 3);
+-- Query 15
+SELECT fname, lname FROM employee WHERE employee.employeeid IN (SELECT dealsWith.employeeid FROM dealsWith WHERE dealsWith.customerid IN (SELECT purchase.customerid FROM purchase WHERE productid IN (SELECT product.productid FROM product WHERE description="Knee Pads")));

@@ -1,0 +1,116 @@
+Warning: Using a password on the command line interface can be insecure.
+ERROR 1451 (23000) at line 18: Cannot delete or update a parent row: a foreign key constraint fails (`mrobi24assign2db`.`dealsWith`, CONSTRAINT `dealsWith_ibfk_1` FOREIGN KEY (`employeeid`) REFERENCES `employee` (`employeeid`))
+--------------
+SELECT * FROM customer
+--------------
+
+customerid	fname	lname	city	phone
+10	Barney	Rubble	Boston	777-1234
+12	Monty	Burns	Springfield	789-0000
+13	Wonder	Woman	Kypto	888-1234
+14	Peter	Griffens	Providence	987-4567
+15	Fred	Flinstone	Boston	777-2345
+21	Homer	Simpson	Springfield	686-8956
+31	Sideshow	Bob	Springfield	686-5555
+--------------
+SELECT * FROM employee
+--------------
+
+employeeid	fname	lname	city	commission
+11	Regis	Philbin	Boston	33
+12	Rosie	Cox	Ottawa	50
+17	Matthew	Robinson	Forest	100
+22	Courtney	Cox	New York	25
+33	David	Letterman	Bedrock	100
+66	Rosie	ODonnell	Ottawa	100
+99	Hugh	Grant	Springfield	16
+--------------
+SELECT * FROM product
+--------------
+
+productid	description	price	stock
+11	Bike	150.00	200
+12	Socks	2.00	100
+17	Flex Tape	19.99	25
+66	Elbow Pads	14.25	120
+78	Knee Pads	12.15	70
+88	Roller Blades	75.00	89
+99	Helmet	29.00	30
+--------------
+SELECT * FROM purchase
+--------------
+
+quantity	customerid	productid
+20	21	99
+14	21	12
+10	21	66
+5	31	99
+5	31	12
+5	31	78
+5	31	66
+2	15	66
+2	15	78
+19	14	66
+--------------
+SELECT * FROM dealsWith
+--------------
+
+employeeid	customerid
+99	21
+99	12
+99	14
+33	13
+11	10
+11	15
+66	31
+--------------
+DROP VIEW IF EXISTS view
+--------------
+
+--------------
+CREATE VIEW view AS SELECT fname, lname, description, quantity, price, ROUND(quantity * price,2) AS totalPrice FROM customer, product, purchase WHERE customer.customerid=purchase.customerid AND product.productid=purchase.productid ORDER BY customer.lname
+--------------
+
+--------------
+SELECT * FROM view
+--------------
+
+fname	lname	description	quantity	price	totalPrice
+Sideshow	Bob	Helmet	5	29.00	145.00
+Sideshow	Bob	Socks	5	2.00	10.00
+Sideshow	Bob	Knee Pads	5	12.15	60.75
+Sideshow	Bob	Elbow Pads	5	14.25	71.25
+Fred	Flinstone	Elbow Pads	2	14.25	28.50
+Fred	Flinstone	Knee Pads	2	12.15	24.30
+Peter	Griffens	Elbow Pads	19	14.25	270.75
+Homer	Simpson	Helmet	20	29.00	580.00
+Homer	Simpson	Socks	14	2.00	28.00
+Homer	Simpson	Elbow Pads	10	14.25	142.50
+--------------
+SELECT * FROM view WHERE totalPrice > 100
+--------------
+
+fname	lname	description	quantity	price	totalPrice
+Sideshow	Bob	Helmet	5	29.00	145.00
+Peter	Griffens	Elbow Pads	19	14.25	270.75
+Homer	Simpson	Helmet	20	29.00	580.00
+Homer	Simpson	Elbow Pads	10	14.25	142.50
+--------------
+DELETE FROM product WHERE description="Flex Tape"
+--------------
+
+--------------
+SELECT * FROM product
+--------------
+
+productid	description	price	stock
+11	Bike	150.00	200
+12	Socks	2.00	100
+66	Elbow Pads	14.25	120
+78	Knee Pads	12.15	70
+88	Roller Blades	75.00	89
+99	Helmet	29.00	30
+--------------
+DELETE FROM employee WHERE employee.city="Springfield"
+--------------
+

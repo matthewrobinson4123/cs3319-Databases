@@ -1,0 +1,19 @@
+USE mrobi24assign2db;
+
+SELECT * FROM customer;
+SELECT * FROM employee;
+SELECT * FROM product;
+SELECT * FROM purchase;
+SELECT * FROM dealsWith;
+
+DROP VIEW IF EXISTS view;
+CREATE VIEW view AS SELECT fname, lname, description, quantity, price, ROUND(quantity * price,2) AS totalPrice FROM customer, product, purchase WHERE customer.customerid=purchase.customerid AND product.productid=purchase.productid ORDER BY customer.lname;
+
+SELECT * FROM view;
+SELECT * FROM view WHERE totalPrice > 100;
+
+DELETE FROM product WHERE description="Flex Tape";
+SELECT * FROM product;
+
+DELETE FROM employee WHERE employee.city="Springfield";
+-- Rows not deleted because thir primary keys are being used as foreign keys in other tables
