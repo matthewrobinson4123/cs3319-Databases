@@ -11,7 +11,7 @@
 <h1>New Purchase:</h1>
 <ol>
 <?php
-        $custid=$_POST["customers"];
+        $custid=$_POST["custid"];
         $prodid=$_POST["prodid"];
         $quantity=$_POST["quantity"];
         $query = 'INSERT INTO purchase VALUES("' . $quantity . '","' . $custid . '","' . $prodid . '")';
